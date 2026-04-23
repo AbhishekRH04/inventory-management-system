@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body{
+            background: lightsteelblue;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        if (!localStorage.getItem("user")) {
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <header class="main-header">
+        <div class="logo">Inventory<span>System</span></div>
+        <div class="stats-ribbon">
+            <div class="stat-box">Total: <span id="total">0</span></div>
+            <div class="stat-box warn">Low Stock: <span id="low">0</span></div>
+            <div class="stat-box info">Top: <span id="topCategory">-</span></div>
+        </div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </header>
+
+    <div class="main-container">
+        <section class="form-section">
+            <input id="name" placeholder="Product Name">
+            <select id="category">
+                <option value="">Category</option>
+                <option>Stationery</option>
+                <option>Electronics</option>
+                <option>Groceries</option>
+            </select>
+            <input id="price" type="number" placeholder="Price">
+            <input id="quantity" type="number" placeholder="Qty">
+            <button class="add-btn" id="save-btn" onclick="addProduct()">Add Product</button>
+        </section>
+
+        <div class="action-bar">
+            <div class="search-group">
+                <input id="search" placeholder="Search by name...">
+                <button onclick="searchProduct()">Search</button>
+                <button class="btn-alt" onclick="load()">Show All</button>
+            </div>
+            <div class="sort-group">
+                <button onclick="sortAsc()">Price ↑</button>
+                <button onclick="sortDesc()">Price ↓</button>
+                <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

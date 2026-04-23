@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Inventory System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page">
+
+    <div class="auth-card">
+        <div class="logo">Inventory<span>System</span></div>
+        <h2>Welcome Back</h2>
+        
+        <div class="auth-inputs">
+            <input id="login-user" type="text" placeholder="Username">
+            <input id="login-pass" type="password" placeholder="Password">
+            <button class="add-btn" style="width: 100%; margin-top: 10px;" onclick="login()">Login</button>
+        </div>
+
+        <div class="auth-link">
+            Don't have an account? <a href="register.html">Register</a>
+        </div>
+    </div>
+
+    <script>
+    function login() {
+        const userVal = document.getElementById("login-user").value;
+        const passVal = document.getElementById("login-pass").value;
+
+        if (!userVal || !passVal) {
+            alert("Please enter both username and password");
+            return;
+        }
+
+        fetch("http://localhost:8080/auth/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                username: userVal,
+                password: passVal
+            })
+        })
+        .then(res => res.text())
+        .then(data => {
+            if (data.trim() === "SUCCESS") {
+                localStorage.setItem("user", userVal);
+                window.location.href = "index.html";
+            } else {
+                alert("Invalid username or password");
+            }
+        })
+        .catch(err => {
+            console.error("Connection error:", err);
+            alert("Cannot connect to server. Is the Java app running?");
+        });
+    }
+    </script>
+</body>
+</html>
