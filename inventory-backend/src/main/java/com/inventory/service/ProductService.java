@@ -2,7 +2,11 @@ package com.inventory.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.inventory.entity.Product;
+import com.inventory.exception.ProductNotFoundException;
+import com.inventory.exception.DuplicateProductException;
+import com.inventory.exception.InvalidStockException;
 import com.inventory.repository.ProductRepository;
 
 import java.util.List;
@@ -16,7 +20,25 @@ public class ProductService {
     // CREATE / UPDATE
     public Product save(Product product) {
 
-        //  Logic: Low Stock Detection
+        // Duplicate product check
+        Product existingProduct = repo.findByName(product.getName());
+
+        if (existingProduct != null &&
+                existingProduct.getId() != product.getId()) {
+
+            throw new DuplicateProductException(
+                    "Product with name '" + product.getName() + "' already exists"
+            );
+        }
+
+        // Invalid stock validation
+        if (product.getQuantity() < 0) {
+            throw new InvalidStockException(
+                    "Product quantity cannot be negative"
+            );
+        }
+
+        // Low stock logic
         if (product.getQuantity() < 10) {
             product.setStatus("LOW_STOCK");
         } else {
@@ -33,12 +55,25 @@ public class ProductService {
 
     // READ BY ID
     public Product getById(int id) {
-        return repo.findById(id).orElse(null);
+        return repo.findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException(
+                                "Product with ID " + id + " not found"
+                        )
+                );
     }
 
     // DELETE
     public void delete(int id) {
-        repo.deleteById(id);
+
+        Product product = repo.findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException(
+                                "Cannot delete. Product with ID " + id + " not found"
+                        )
+                );
+
+        repo.delete(product);
     }
 
     // SEARCH
