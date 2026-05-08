@@ -1,9 +1,12 @@
 package com.inventory.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.inventory.entity.Product;
+import com.inventory.entity.StockHistory;
 import com.inventory.service.ProductService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,57 +18,89 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    // CREATE
+    // ─── CREATE ──────────────────────────────────────────────────────────────
+
     @PostMapping
-    public Product add(@RequestBody Product p) {
-        return service.save(p);
+    public ResponseEntity<Product> add(
+            @Valid @RequestBody Product p,
+            @RequestHeader(value = "X-Username", defaultValue = "anonymous") String username) {
+
+        return ResponseEntity.ok(service.create(p, username));
     }
 
-    // READ ALL
+    // ─── READ ALL ─────────────────────────────────────────────────────────────
+
     @GetMapping
     public List<Product> getAll() {
         return service.getAll();
     }
 
-    // READ BY ID
+    // ─── READ BY ID ───────────────────────────────────────────────────────────
+
     @GetMapping("/{id}")
     public Product getOne(@PathVariable int id) {
         return service.getById(id);
     }
 
-    // UPDATE
+    // ─── UPDATE ───────────────────────────────────────────────────────────────
+
     @PutMapping("/{id}")
-    public Product update(@PathVariable int id, @RequestBody Product p) {
-        p.setId(id);
-        return service.save(p);
+    public ResponseEntity<Product> update(
+            @PathVariable int id,
+            @Valid @RequestBody Product p,
+            @RequestHeader(value = "X-Username", defaultValue = "anonymous") String username) {
+
+        return ResponseEntity.ok(service.update(id, p, username));
     }
 
-    // DELETE
+    // ─── DELETE ───────────────────────────────────────────────────────────────
+
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable int id) {
-        service.delete(id);
-        return "Deleted Successfully";
+    public ResponseEntity<String> delete(
+            @PathVariable int id,
+            @RequestHeader(value = "X-Username", defaultValue = "anonymous") String username) {
+
+        service.delete(id, username);
+        return ResponseEntity.ok("Product deleted successfully");
     }
 
-    // SEARCH
+    // ─── SEARCH ───────────────────────────────────────────────────────────────
+
     @GetMapping("/search")
     public List<Product> search(@RequestParam String keyword) {
         return service.search(keyword);
     }
 
-    // FILTER
+    // ─── FILTER BY CATEGORY ───────────────────────────────────────────────────
+
     @GetMapping("/category")
-    public List<Product> filter(@RequestParam String category) {
+    public List<Product> filterByCategory(@RequestParam String category) {
         return service.filterByCategory(category);
     }
 
-    // SORT ASC
+    // ─── FILTER BY STATUS ─────────────────────────────────────────────────────
+
+    @GetMapping("/status")
+    public List<Product> filterByStatus(@RequestParam String status) {
+        return service.filterByStatus(status);
+    }
+
+    // ─── DISTINCT CATEGORIES ─────────────────────────────────────────────────
+
+    @GetMapping("/categories")
+    public List<String> getCategories() {
+        return service.getCategories();
+    }
+
+    // ─── SORT ASC ─────────────────────────────────────────────────────────────
+
     @GetMapping("/sort/asc")
     public List<Product> sortAsc() {
         return service.sortByPriceAsc();
     }
 
-    // SORT DESC
+    // ─── SORT DESC ────────────────────────────────────────────────────────────
+
     @GetMapping("/sort/desc")
     public List<Product> sortDesc() {
         return service.sortByPriceDesc();
