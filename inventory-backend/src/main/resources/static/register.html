@@ -62,7 +62,7 @@
         btn.textContent = "Creating account…";
         btn.disabled = true;
 
-        fetch("http://localhost:8080/auth/register", {
+        fetch("https://inventory-management-system-c84f.onrender.com/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: u, password: p })
