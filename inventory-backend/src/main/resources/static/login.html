@@ -55,7 +55,7 @@
         btn.textContent = "Signing in…";
         btn.disabled = true;
 
-        fetch("http://localhost:8080/auth/login", {
+        fetch("https://inventory-management-system-c84f.onrender.com/auth/login",  {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: userVal, password: passVal })
