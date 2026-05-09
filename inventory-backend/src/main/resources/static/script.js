@@ -1,6 +1,6 @@
-const API = "http://localhost:8080/products";
-const AUTH_API = "http://localhost:8080/auth";
-const HISTORY_API = "http://localhost:8080/stock-history";
+const API = "https://inventory-management-system-c84f.onrender.com/products";
+const AUTH_API = "https://inventory-management-system-c84f.onrender.com/auth";
+const HISTORY_API = "https://inventory-management-system-c84f.onrender.com/stock-history";
 
 let editId = null;
 let deleteId = null;
