@@ -230,11 +230,15 @@ small.field-hint { color: var(--text3); font-size: 0.75rem; margin-top: 3px; dis
 .stat-icon.purple{ background: var(--purple-bg); border: 1px solid rgba(167,139,250,0.25); }
 
 .stat-value {
-  font-family: var(--font-head);
-  font-size: 1.75rem;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -1px;
+  font-family: var(--font-body);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .stat-label { font-size: 0.75rem; color: var(--text2); margin-top: 5px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
 
