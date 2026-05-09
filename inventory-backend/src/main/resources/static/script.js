@@ -306,22 +306,29 @@ function closeDeleteOnOverlay(e) {
 
 function confirmDelete() {
     if (deleteId === null) return;
-    fetch(`${API}/${deleteId}`, { method: "DELETE" })
-        .then(async res => {
-            if (!res.ok) {
-                const data = await res.json();
-                throw new Error(data.message);
-            }
-            closeDeleteModal();
-            showToast("Product deleted successfully!", "success");
-            load();
-        })
-        .catch(err => {
-            closeDeleteModal();
-            showToast(err.message || "Delete failed", "error");
-        });
-}
 
+    const user = localStorage.getItem("user");
+
+    fetch(`${API}/${deleteId}`, {
+        method: "DELETE",
+        headers: {
+            "X-Username": user
+        }
+    })
+    .then(async res => {
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.message);
+        }
+        closeDeleteModal();
+        showToast("Product deleted successfully!", "success");
+        load();
+    })
+    .catch(err => {
+        closeDeleteModal();
+        showToast(err.message || "Delete failed", "error");
+    });
+}
 // ─── STOCK HISTORY ───────────────────────────────────────────────────────────
 
 function loadHistory() {
